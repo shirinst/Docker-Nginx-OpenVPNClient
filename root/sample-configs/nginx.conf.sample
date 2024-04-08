@@ -1,25 +1,26 @@
-user abc;
-worker_processes auto;
-pid /run/nginx.pid;
+user abc; # Указывает пользователя, от имени которого будет запускаться рабочий процесс Nginx.
+worker_processes auto; # Указывает Nginx автоматически определять количество рабочих процессов.
+pid /run/nginx.pid; # Указывает путь к файлу, в котором будет храниться идентификатор процесса (PID) рабочего процесса Nginx.
 
-events { worker_connections 1024; }
+events { # Блок, в котором определяются настройки обработки событий.
+    worker_connections 1024; # Указывает максимальное количество одновременных соединений, которые может обрабатывать каждый рабочий процесс.
+}
 
-http {
+http { # Блок, в котором определяются настройки обработки HTTP-запросов.
     log_format compression '$remote_addr - $remote_user [$time_local] '
                            '"$request" $status $body_bytes_sent '
-                           '"$http_referer" "$http_user_agent" "$gzip_ratio"';
-
+                           '"$http_referer" "$http_user_agent" "$gzip_ratio"'; # Определяет формат логирования сжатия данных.
     
-    access_log /config/log/nginx/access.log;
-    error_log /config/log/nginx/error.log;
-    sendfile on;
+    access_log /config/log/nginx/access.log; # Указывает путь к файлу, в котором будут храниться логи доступа.
+    error_log /config/log/nginx/error.log; # Указывает путь к файлу, в котором будут храниться логи ошибок.
+    sendfile on; # Включает использование sendfile, что увеличивает производительность при передаче файлов.
 
-    server {
-        listen 80;
+    server { # Блок, в котором определяются настройки виртуального сервера.
+        listen 80; # Указывает порт, на котором будет прослушивать виртуальный сервер.
 
-        location / {
-            proxy_pass http://example.com/;
-            proxy_set_header  X-Real-IP  $remote_addr;
+        location / { # Блок, в котором определяются настройки обработки запросов к корневому каталогу.
+            proxy_pass http://example.com/; # Указывает адрес, к которому будут перенаправляться запросы.
+            proxy_set_header  X-Real-IP  $remote_addr; # Указывает, что в заголовке X-Real-IP будет передаваться реальный IP-адрес клиента.
         }
     }
 }
