@@ -1,8 +1,8 @@
 #!/bin/bash
 
-# $IMAGE_NAME var is injected into the build so the tag is correct.
+# Переменная $IMAGE_NAME добавляется в сборку, поэтому тег правильный.
 
-echo "Build hook running"
+echo "Строю работающий хук"
 docker build --build-arg BUILD_DATE=`date -u +"%Y-%m-%dT%H:%M:%SZ"` \
              --build-arg VCS_REF=`git rev-parse --short HEAD` \
              -t $IMAGE_NAME .
